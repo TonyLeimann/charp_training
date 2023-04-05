@@ -17,20 +17,43 @@ namespace addressbook_web_tests
         [Test]
         public void CreatingContactTest()
         {
-            OpenHomePage();
-            Login(new AccountData ("admin", "secret"));
-            AddContact();
+            
+            
             ContactData contact = new ContactData("Anton","Simakhin");
             contact.Company = "Google";
             contact.Phone_mobile = "88005553535";
             contact.Nick = "sima";
             contact.Middlename = "Andrey";
-            FillContactForm(contact);
-            EnterContact();
-            ReturnToHomePage();
-            InitLogout();
+
+
+            app.Contact.Create(contact);
+
+            
+            app.Navigator.InitLogout();
         }
-        
-      
+
+
+        [Test]
+        public void EmptyCreatingContactTest()
+        {
+
+            
+            ContactData contact = new ContactData("","");
+            contact.Company = "";
+            contact.Phone_mobile = "";
+            contact.Nick = "";
+            contact.Middlename = "";
+
+
+            app.Contact.Create(contact);
+
+            
+            app.Navigator.InitLogout();
+        }
+
+
+
+
+
     }
 }

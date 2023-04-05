@@ -17,18 +17,32 @@ namespace addressbook_web_tests
         [Test]
         public void GroupCreationTest()
         {
-            OpenHomePage();
-            Login(new AccountData("admin","secret"));
-            GoToGroupsPage();
-            InitGroupsCreation();
+
+            
             GroupData group = new GroupData("sd");
-           // group.Header = "das";
-           // group.Footer = "weq";
-            FillGroupsForm(group);
-            SubmitGroupCreation();
-            ReturnToGroupPage();
-            InitLogout();
+             group.Header = "das";
+             group.Footer = "weq";
+
+            app.Groups.Create(group);
+
+            app.Navigator.InitLogout();
         }
+
+        [Test]
+        public void EmptyGroupCreationTest()
+        {
+
+            
+            GroupData group = new GroupData("");
+             group.Header = "";
+             group.Footer = "";
+
+            app.Groups.Create(group);
+            
+            app.Navigator.InitLogout();
+        }
+
+
 
     }
 }
