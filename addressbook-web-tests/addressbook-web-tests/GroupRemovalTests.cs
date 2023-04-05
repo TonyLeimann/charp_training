@@ -10,25 +10,22 @@ using OpenQA.Selenium.Support.UI;
 namespace addressbook_web_tests
 {
     [TestFixture]
-    public class GroupCreationTests:TestBase// наследник TestBase
+    public class GroupRemovalTests:TestBase // наследник TestBase
     {
-       
-
+        
         [Test]
-        public void GroupCreationTest()
+        public void GroupRemovalTest()
         {
             OpenHomePage();
             Login(new AccountData("admin","secret"));
             GoToGroupsPage();
-            InitGroupsCreation();
-            GroupData group = new GroupData("sd");
-           // group.Header = "das";
-           // group.Footer = "weq";
-            FillGroupsForm(group);
-            SubmitGroupCreation();
+            SelectGroup(1);
+            DeleteGroup();
             ReturnToGroupPage();
-            InitLogout();
         }
+
+           
+
 
     }
 }
