@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace addressbook_web_tests
@@ -57,8 +58,73 @@ namespace addressbook_web_tests
             return this;
         }
 
+        public ContactHelper ModifyContact(int tr, ContactData edit_contact)
+        {
+            GoToHomePage();
+            EditContact(tr);
+            FillContactForm(edit_contact);
+            UpdateContact();
+            manager.Navigator.ReturnToHomePage();
+
+            return this;
+        }
+
+        public ContactHelper Remove(int id)
+        {
+            GoToHomePage();
+            SelectContact(id);
+            DeleteContact();
+            ConfirmDeleteContact();
+            return this;
 
 
+        }
+
+        public ContactHelper ConfirmDeleteContact()
+        {
+            driver.SwitchTo().Alert().Accept();
+            return this;
+        }
+
+        public ContactHelper DeleteContact()
+        {
+
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            return this;
+
+        }
+
+        public ContactHelper SelectContact(int id)
+        {
+
+            driver.FindElement(By.Id(id.ToString())).Click();
+            return this;
+                      
+        }
+
+        public ContactHelper GoToHomePage()
+        {
+                  
+          driver.FindElement(By.LinkText("home")).Click();
+          return this;
+            
+
+        }
+
+ 
+
+
+
+        public ContactHelper EditContact(int tr)
+        {
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + tr +"]/td[8]/a/img")).Click();
+            return this;
+        }
+        public ContactHelper UpdateContact()
+        {
+            driver.FindElement(By.XPath("//div[@id='content']/form/input[22]")).Click();
+            return this;
+        }
 
 
     }

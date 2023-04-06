@@ -29,7 +29,7 @@ namespace addressbook_web_tests
         {
 
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(1);
+            SelectGroup(Count);
             DeleteGroup();
             ReturnToGroupPage();
             return this;
@@ -87,9 +87,35 @@ namespace addressbook_web_tests
 
         }
 
+        public GroupHelper Modify(int o, GroupData newData)
+        {
+            manager.navigator.GoToGroupsPage();
+
+            SelectGroup(o);
+            InitGroupModification();
+            FillGroupsForm(newData);
+            SubmitGroupModification();
+            ReturnToGroupPage();
+
+            return this;
+        }
+
+      
+
+        public GroupHelper InitGroupModification()
+        {
+
+            driver.FindElement(By.Name("edit")).Click();
+            return this;
+        }
+
+        public GroupHelper SubmitGroupModification()
+        {
 
 
-
+            driver.FindElement(By.Name("update")).Click();
+            return this;
+        }
 
     }
 }
