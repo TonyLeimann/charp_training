@@ -69,6 +69,7 @@
     <Compile Include="FirstProject\Figure.cs" />
     <Compile Include="Model\GroupData.cs" />
     <Compile Include="AppManager\GroupHelper.cs" />
+    <Compile Include="Tests\Class1.cs" />
     <Compile Include="Tests\ContactModificationTests.cs" />
     <Compile Include="Tests\ContactRemoveTests.cs" />
     <Compile Include="Tests\GroupModificationTests.cs" />

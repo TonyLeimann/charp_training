@@ -69,10 +69,10 @@ namespace addressbook_web_tests
             return this;
         }
 
-        public ContactHelper Remove(int id)
+        public ContactHelper Remove(int Line)
         {
             GoToHomePage();
-            SelectContact(id);
+            SelectContact(Line);
             DeleteContact();
             ConfirmDeleteContact();
             return this;
@@ -94,10 +94,10 @@ namespace addressbook_web_tests
 
         }
 
-        public ContactHelper SelectContact(int id)
+        public ContactHelper SelectContact(int Line)
         {
-
-            driver.FindElement(By.Id(id.ToString())).Click();
+                        
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ Line +"]/td/input")).Click();
             return this;
                       
         }

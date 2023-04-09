@@ -7,7 +7,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
-namespace addressbook_web_tests
+namespace addressbook_web_tests.Tests
 {
     [TestFixture]
     public class ContactCreatingTests: TestBase// наследник TestBase

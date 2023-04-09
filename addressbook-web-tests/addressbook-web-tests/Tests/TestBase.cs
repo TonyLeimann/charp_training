@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace addressbook_web_tests
+namespace addressbook_web_tests.Tests
 {
     public class TestBase
     {
