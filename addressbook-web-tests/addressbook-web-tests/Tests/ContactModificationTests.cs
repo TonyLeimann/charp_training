@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class ContactModificationTests:TestBase
+    public class ContactModificationTests: AuthTestBase
     {
         [Test]
 

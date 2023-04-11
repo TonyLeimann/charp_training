@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class GroupModificationTests:TestBase
+    public class GroupModificationTests: AuthTestBase
     {
 
         [Test]
@@ -21,7 +21,7 @@ namespace addressbook_web_tests.Tests
             newData.Footer = "ee";
 
 
-            app.Groups.Modify(3,newData);
+            app.Groups.Modify(1,newData);
 
 
         }

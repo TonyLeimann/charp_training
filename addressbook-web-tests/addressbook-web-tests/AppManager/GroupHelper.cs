@@ -25,11 +25,11 @@ namespace addressbook_web_tests
             return this;
         }
 
-        public GroupHelper Remove(int Count)
+        public GroupHelper Remove(int Number)
         {
 
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(Count);
+            SelectGroup(Number);
             DeleteGroup();
             ReturnToGroupPage();
             return this;
@@ -43,16 +43,10 @@ namespace addressbook_web_tests
             return this;
         }
         public GroupHelper FillGroupsForm(GroupData group)
-        {
-            driver.FindElement(By.Name("group_name")).Click();
-            driver.FindElement(By.Name("group_name")).Clear();
-            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            driver.FindElement(By.Name("group_header")).Click();
-            driver.FindElement(By.Name("group_header")).Clear();
-            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            driver.FindElement(By.Name("group_footer")).Click();
-            driver.FindElement(By.Name("group_footer")).Clear();
-            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+        {  
+            Type(By.Name("group_name"), group.Name);
+            Type(By.Name("group_header"), group.Header);
+            Type(By.Name("group_footer"), group.Footer);
             return this;
         }
 
@@ -87,11 +81,10 @@ namespace addressbook_web_tests
 
         }
 
-        public GroupHelper Modify(int o, GroupData newData)
+        public GroupHelper Modify(int LineGroup, GroupData newData)
         {
             manager.navigator.GoToGroupsPage();
-
-            SelectGroup(o);
+            SelectGroup(LineGroup);
             InitGroupModification();
             FillGroupsForm(newData);
             SubmitGroupModification();

@@ -10,7 +10,7 @@ using OpenQA.Selenium.Support.UI;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class GroupRemovalTests:TestBase // наследник TestBase
+    public class GroupRemovalTests: AuthTestBase // наследник TestBase
     {
         
         [Test]

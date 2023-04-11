@@ -10,7 +10,7 @@ using OpenQA.Selenium.Support.UI;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class ContactCreatingTests: TestBase// наследник TestBase
+    public class ContactCreatingTests: AuthTestBase// наследник TestBase
     {
        
 
@@ -27,9 +27,8 @@ namespace addressbook_web_tests.Tests
 
 
             app.Contact.Create(contact);
-
-            
-            app.Navigator.InitLogout();
+                     
+          
         }
 
 
@@ -38,17 +37,15 @@ namespace addressbook_web_tests.Tests
         {
 
             
-            ContactData contact = new ContactData("","");
-            contact.Company = "";
-            contact.Phone_mobile = "";
-            contact.Nick = "";
-            contact.Middlename = "";
+            ContactData contact = new ContactData("",null);
+            contact.Company = null;
+            contact.Phone_mobile = null;
+            contact.Nick = null;
+            contact.Middlename = null;
 
 
             app.Contact.Create(contact);
 
-            
-            app.Navigator.InitLogout();
         }
 
 

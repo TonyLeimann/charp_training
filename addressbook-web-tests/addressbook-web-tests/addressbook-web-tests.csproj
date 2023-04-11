@@ -53,11 +53,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="WebDriver, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.WebDriver.4.8.2\lib\net48\WebDriver.dll</HintPath>
+    <Reference Include="WebDriver, Version=3.141.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.3.141.0\lib\net45\WebDriver.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Support, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.Support.4.8.2\lib\net48\WebDriver.Support.dll</HintPath>
+    <Reference Include="WebDriver.Support, Version=3.141.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.Support.3.141.0\lib\net45\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -69,7 +69,7 @@
     <Compile Include="FirstProject\Figure.cs" />
     <Compile Include="Model\GroupData.cs" />
     <Compile Include="AppManager\GroupHelper.cs" />
-    <Compile Include="Tests\Class1.cs" />
+    <Compile Include="Tests\AuthTestBase.cs" />
     <Compile Include="Tests\ContactModificationTests.cs" />
     <Compile Include="Tests\ContactRemoveTests.cs" />
     <Compile Include="Tests\GroupModificationTests.cs" />
@@ -78,6 +78,7 @@
     <Compile Include="AppManager\LoginHelper.cs" />
     <Compile Include="AppManager\NavigationHelper.cs" />
     <Compile Include="FirstProject\Square.cs" />
+    <Compile Include="Tests\LoginTests.cs" />
     <Compile Include="Tests\TestBase.cs" />
     <Compile Include="FirstProject\UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,10 +97,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.props'))" />
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets'))" />
-    <Error Condition="!Exists('..\packages\Selenium.WebDriver.4.8.2\build\Selenium.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.4.8.2\build\Selenium.WebDriver.targets'))" />
     <Error Condition="!Exists('..\packages\NUnit3TestAdapter.4.4.2\build\net462\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.4.4.2\build\net462\NUnit3TestAdapter.props'))" />
     <Error Condition="!Exists('..\packages\NUnit.3.13.3\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.13.3\build\NUnit.props'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.2.2.10\build\net46\MSTest.TestAdapter.targets')" />
-  <Import Project="..\packages\Selenium.WebDriver.4.8.2\build\Selenium.WebDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.4.8.2\build\Selenium.WebDriver.targets')" />
 </Project>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -17,8 +18,9 @@ namespace addressbook_web_tests
         public LoginHelper loginHelper;
         public NavigationHelper navigator;
         public GroupHelper groupHelper;
-
         public ContactHelper contactHelper;
+
+        private static ThreadLocal <  ApplicationManager > app = new ThreadLocal<ApplicationManager>();
 
         public IWebDriver Driver { get { return driver; } } 
 
@@ -33,17 +35,10 @@ namespace addressbook_web_tests
             groupHelper = new GroupHelper(this);
 
             contactHelper = new ContactHelper(this);
-
-
         }
 
-        public LoginHelper Auth { get { return loginHelper; } }
-        public NavigationHelper Navigator { get { return navigator; } }
-        public GroupHelper Groups { get { return groupHelper; } }
-        public ContactHelper Contact { get { return contactHelper; } }
 
-
-        public void StopDriver()
+         ~ApplicationManager()
         {
             try
             {
@@ -51,10 +46,29 @@ namespace addressbook_web_tests
             }
             catch (Exception)
             {
-                
+
             }
-            
+
         }
+
+        public static ApplicationManager GetInstance()// global
+        {
+            if (! app.IsValueCreated)
+            {
+                ApplicationManager newInstance = new ApplicationManager();
+                newInstance.Navigator.OpenHomePage();
+                app.Value = newInstance;
+            }
+            return app.Value;
+        }
+
+
+        public LoginHelper Auth { get { return loginHelper; } }
+        public NavigationHelper Navigator { get { return navigator; } }
+        public GroupHelper Groups { get { return groupHelper; } }
+        public ContactHelper Contact { get { return contactHelper; } }
+
+
 
 
 

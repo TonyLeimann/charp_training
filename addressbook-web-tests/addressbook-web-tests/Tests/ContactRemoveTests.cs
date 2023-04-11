@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class ContactRemoveTests:TestBase
+    public class ContactRemoveTests: AuthTestBase
     {
 
         [Test]
