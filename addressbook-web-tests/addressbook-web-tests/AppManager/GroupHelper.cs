@@ -86,10 +86,10 @@ namespace addressbook_web_tests
 
         }
 
-        public GroupHelper Modify(int LineGroup, GroupData newData)
+        public GroupHelper Modify(int LineGroup, GroupData group, GroupData newData)
         {
             manager.navigator.GoToGroupsPage();
-            SelectGroup(LineGroup,newData);
+            SelectGroup(LineGroup,group);
             InitGroupModification();
             FillGroupsForm(newData);
             SubmitGroupModification();

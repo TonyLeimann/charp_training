@@ -19,9 +19,9 @@ namespace addressbook_web_tests.Tests
         {
 
             
-            GroupData group = new GroupData("sd");
-             group.Header = "das";
-             group.Footer = "weq";
+            GroupData group = new GroupData("asd");
+             group.Header = "asd";
+             group.Footer = "asd";
 
             app.Groups.Create(group);
 

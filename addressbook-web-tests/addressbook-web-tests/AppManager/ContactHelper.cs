@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace addressbook_web_tests
@@ -46,10 +47,10 @@ namespace addressbook_web_tests
             return this;
         }
 
-        public ContactHelper ModifyContact(int tr, ContactData edit_contact)
+        public ContactHelper ModifyContact(int tr,ContactData contact, ContactData edit_contact)
         {
             GoToHomePage();
-            EditContact(tr);
+            EditContact(tr,contact);
             FillContactForm(edit_contact);
             UpdateContact();
             manager.Navigator.ReturnToHomePage();
@@ -57,10 +58,10 @@ namespace addressbook_web_tests
             return this;
         }
 
-        public ContactHelper Remove(int Line)
+        public ContactHelper Remove(int Line, ContactData contact)
         {
             GoToHomePage();
-            SelectContact(Line);
+            SelectContact(Line,contact);
             DeleteContact();
             ConfirmDeleteContact();
             return this;
@@ -82,9 +83,15 @@ namespace addressbook_web_tests
 
         }
 
-        public ContactHelper SelectContact(int Line)
+      
+
+        public ContactHelper SelectContact(int Line,ContactData contact)
         {
-                        
+            if (!IsElementPresent(By.Name("selected[]")))
+            {
+                Create(contact);
+            }
+
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ Line +"]/td/input")).Click();
             return this;
                       
@@ -103,8 +110,13 @@ namespace addressbook_web_tests
 
 
 
-        public ContactHelper EditContact(int tr)
+        public ContactHelper EditContact(int tr,ContactData contact)
         {
+            if (!IsElementPresent(By.Name("selected[]")))
+            {
+                Create(contact);
+            }
+
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + tr +"]/td[8]/a/img")).Click();
             return this;
         }

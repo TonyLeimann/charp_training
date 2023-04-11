@@ -21,9 +21,10 @@ namespace addressbook_web_tests.Tests
             edit_contact.Nick = "sima";
             edit_contact.Middlename = "Andrey";
 
+            ContactData contact = new ContactData("Billy","Heringgton");
 
 
-            app.Contact.ModifyContact(2,edit_contact);
+            app.Contact.ModifyContact(2,contact,edit_contact);
 
 
            

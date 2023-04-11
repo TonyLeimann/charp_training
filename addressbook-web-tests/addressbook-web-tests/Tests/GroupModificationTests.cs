@@ -16,12 +16,17 @@ namespace addressbook_web_tests.Tests
         public void GroupModificationTest()
         {
 
-            GroupData newData = new GroupData("qqq");
-            newData.Header = "www";
-            newData.Footer = "ee";
+            GroupData group = new GroupData("qwerty");
+            group.Header = "qwerty";
+            group.Footer = "qwerty";
 
 
-            app.Groups.Modify(1,newData);
+            GroupData newData = new GroupData("text");
+            newData.Header = "text";
+            newData.Footer = "text";
+
+
+            app.Groups.Modify(1,newData,group);
 
 
         }
