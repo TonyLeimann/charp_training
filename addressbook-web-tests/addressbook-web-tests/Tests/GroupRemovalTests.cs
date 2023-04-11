@@ -16,7 +16,13 @@ namespace addressbook_web_tests.Tests
         [Test]
         public void GroupRemovalTest()
         {
-            app.Groups.Remove(1);
+
+
+            GroupData newGR = new GroupData("sd");
+            newGR.Header = "das";
+            newGR.Footer = "weq";
+
+            app.Groups.Remove(1,newGR);
            
         }
 

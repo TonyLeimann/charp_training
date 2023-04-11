@@ -32,7 +32,7 @@ namespace addressbook_web_tests
 
         public void GoToGroupsPage()
         {
-            if (driver.Url == baseURL + "/ group.php"
+            if (driver.Url == baseURL + "/group.php"
                 && IsElementPresent(By.Name("new")))
             {
                 return;

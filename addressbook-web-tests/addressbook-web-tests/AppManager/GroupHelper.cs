@@ -25,11 +25,11 @@ namespace addressbook_web_tests
             return this;
         }
 
-        public GroupHelper Remove(int Number)
+        public GroupHelper Remove(int Number,GroupData group)
         {
 
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(Number);
+            SelectGroup(Number,group);
             DeleteGroup();
             ReturnToGroupPage();
             return this;
@@ -66,9 +66,14 @@ namespace addressbook_web_tests
 
         /// методы для выбора группы и удаления
 
-        public GroupHelper SelectGroup(int index)
+        public GroupHelper SelectGroup(int index,GroupData group)
         {
+            if (! IsElementPresent(By.Name("selected[]")))
+            {
+                Create(group);
+            }
             driver.FindElement(By.XPath("//div[@id='content']/form/span[" + index + "]/input")).Click();
+
             return this;
         }
 
@@ -84,7 +89,7 @@ namespace addressbook_web_tests
         public GroupHelper Modify(int LineGroup, GroupData newData)
         {
             manager.navigator.GoToGroupsPage();
-            SelectGroup(LineGroup);
+            SelectGroup(LineGroup,newData);
             InitGroupModification();
             FillGroupsForm(newData);
             SubmitGroupModification();
