@@ -47,10 +47,10 @@ namespace addressbook_web_tests
             return this;
         }
 
-        public ContactHelper ModifyContact(int tr,ContactData contact, ContactData edit_contact)
+        public ContactHelper ModifyContact(int tr, ContactData edit_contact)
         {
-            GoToHomePage();
-            EditContact(tr,contact);
+            manager.Navigator.GoToHomePage();
+            EditContact(tr);
             FillContactForm(edit_contact);
             UpdateContact();
             manager.Navigator.ReturnToHomePage();
@@ -58,10 +58,10 @@ namespace addressbook_web_tests
             return this;
         }
 
-        public ContactHelper Remove(int Line, ContactData contact)
+        public ContactHelper Remove(int Line)
         {
-            GoToHomePage();
-            SelectContact(Line,contact);
+            manager.Navigator.GoToHomePage();
+            SelectContact(Line);
             DeleteContact();
             ConfirmDeleteContact();
             return this;
@@ -85,38 +85,17 @@ namespace addressbook_web_tests
 
       
 
-        public ContactHelper SelectContact(int Line,ContactData contact)
+        public ContactHelper SelectContact(int Line)
         {
-            if (!IsElementPresent(By.Name("selected[]")))
-            {
-                Create(contact);
-            }
-
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ Line +"]/td/input")).Click();
             return this;
                       
         }
 
-        public ContactHelper GoToHomePage()
+
+        
+        public ContactHelper EditContact(int tr)
         {
-                  
-          driver.FindElement(By.LinkText("home")).Click();
-          return this;
-            
-
-        }
-
- 
-
-
-
-        public ContactHelper EditContact(int tr,ContactData contact)
-        {
-            if (!IsElementPresent(By.Name("selected[]")))
-            {
-                Create(contact);
-            }
-
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + tr +"]/td[8]/a/img")).Click();
             return this;
         }
@@ -126,6 +105,18 @@ namespace addressbook_web_tests
             return this;
         }
 
+        public ContactHelper FindContactAnotherCreate()
+        {
+            manager.Navigator.GoToHomePage();
+
+            if (!IsElementPresent(By.Name("entry")))
+            {
+                ContactData newContact = new ContactData("Fill", "Foden");
+                Create(newContact);
+            }
+            return this;
+                        
+        }
 
     }
 }

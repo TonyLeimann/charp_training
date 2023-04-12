@@ -10,42 +10,34 @@ using OpenQA.Selenium.Support.UI;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class ContactCreatingTests: AuthTestBase// наследник TestBase
+    public class ContactCreatingTests: AuthTestBase
     {
        
 
         [Test]
         public void CreatingContactTest()
-        {
-            
-            
-            ContactData contact = new ContactData("Anton","Simakhin");
-            contact.Company = "Google";
-            contact.Phone_mobile = "88005553535";
-            contact.Nick = "sima";
-            contact.Middlename = "Andrey";
+        {    
+            ContactData contact = new ContactData("Raul","Gonzales");
+            contact.Company = "Spain";
+            contact.Phone_mobile = "+7 777 777 77 77";
+            contact.Nick = "Madridista";
+            contact.Middlename = "Blanco";
 
-
-            app.Contact.Create(contact);
-                     
+            app.Contact.Create(contact); 
           
         }
 
 
         [Test]
         public void EmptyCreatingContactTest()
-        {
-
-            
+        {           
             ContactData contact = new ContactData("",null);
             contact.Company = null;
             contact.Phone_mobile = null;
             contact.Nick = null;
             contact.Middlename = null;
 
-
             app.Contact.Create(contact);
-
         }
 
 

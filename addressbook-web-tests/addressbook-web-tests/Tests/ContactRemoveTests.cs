@@ -17,10 +17,9 @@ namespace addressbook_web_tests.Tests
         public void ContactRemoveTest()
         {
 
-            ContactData newContact = new ContactData("David", "Butland");
-            newContact.Nick = "number seven";
+            app.Contact.FindContactAnotherCreate();
 
-            app.Contact.Remove(2,newContact);
+            app.Contact.Remove(2);
 
         }
 

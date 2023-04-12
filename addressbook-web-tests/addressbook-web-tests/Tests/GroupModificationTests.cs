@@ -15,19 +15,12 @@ namespace addressbook_web_tests.Tests
 
         public void GroupModificationTest()
         {
-
-            GroupData group = new GroupData("qwerty");
-            group.Header = "qwerty";
-            group.Footer = "qwerty";
-
-
             GroupData newData = new GroupData("text");
             newData.Header = "text";
             newData.Footer = "text";
 
-
-            app.Groups.Modify(1,newData,group);
-
+            app.Groups.FindGroupAnotherCreate();
+            app.Groups.GroupModify(1,newData);
 
         }
 

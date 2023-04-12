@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace addressbook_web_tests
 {
@@ -45,6 +46,19 @@ namespace addressbook_web_tests
         {
             driver.FindElement(By.LinkText("home page")).Click();
         }
+        public void GoToHomePage()
+
+        
+        {
+            if(driver.Url == "http://localhost/addressbook/")
+            {
+                return;
+            }
+            driver.FindElement(By.LinkText("home")).Click();
+            
+
+        }
+
 
 
 

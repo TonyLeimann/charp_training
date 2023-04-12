@@ -15,16 +15,14 @@ namespace addressbook_web_tests.Tests
         public void ContactModificationTest()
         {
 
-            ContactData edit_contact = new ContactData("Anton", "Simakhin");
-            edit_contact.Company = "Google";
-            edit_contact.Phone_mobile = "88005553535";
-            edit_contact.Nick = "sima";
-            edit_contact.Middlename = "Andrey";
+            ContactData edit_contact = new ContactData("Iker", "Casilias");
+            edit_contact.Company = "Real Madrid";
+            edit_contact.Phone_mobile = "+ 7 999 234 23 23";
+            edit_contact.Nick = "Kipper";
+            edit_contact.Middlename = "Sanchez";
 
-            ContactData contact = new ContactData("Billy","Heringgton");
-
-
-            app.Contact.ModifyContact(2,contact,edit_contact);
+            app.Contact.FindContactAnotherCreate();
+            app.Contact.ModifyContact(2,edit_contact);
 
 
            

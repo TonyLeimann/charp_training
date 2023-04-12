@@ -10,23 +10,17 @@ using OpenQA.Selenium.Support.UI;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class GroupRemovalTests: AuthTestBase // наследник TestBase
+    public class GroupRemovalTests: AuthTestBase 
     {
         
         [Test]
         public void GroupRemovalTest()
         {
-
-
-            GroupData newGR = new GroupData("sd");
-            newGR.Header = "das";
-            newGR.Footer = "weq";
-
-            app.Groups.Remove(1,newGR);
+            app.Groups.FindGroupAnotherCreate();
+            app.Groups.Remove(1);
            
         }
-
-           
+                 
 
 
     }

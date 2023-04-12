@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -25,17 +26,42 @@ namespace addressbook_web_tests
             return this;
         }
 
-        public GroupHelper Remove(int Number,GroupData group)
+        public GroupHelper Remove(int index)
         {
 
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(Number,group);
+            SelectGroup(index);
             DeleteGroup();
             ReturnToGroupPage();
             return this;
         }
 
+        public GroupHelper GroupModify(int groupLine, GroupData group_mod)
+        {
+            manager.navigator.GoToGroupsPage();
+            SelectGroup(groupLine);
+            InitGroupModification();
+            FillGroupsForm(group_mod);
+            SubmitGroupModification();
+            ReturnToGroupPage();
 
+            return this;
+        }
+
+
+        public GroupHelper FindGroupAnotherCreate()// для случия, когда нет группы для удаления
+        {
+            manager.Navigator.GoToGroupsPage();
+
+            if (!IsElementPresent(By.Name("selected[]")))
+            {
+                GroupData newGroup = new GroupData("NewForCorrectTest");   
+                              
+                Create(newGroup);
+            }
+            return this;
+
+        }
 
         public GroupHelper InitGroupsCreation()
         {
@@ -66,12 +92,9 @@ namespace addressbook_web_tests
 
         /// методы для выбора группы и удаления
 
-        public GroupHelper SelectGroup(int index,GroupData group)
+        public GroupHelper SelectGroup(int index)
         {
-            if (! IsElementPresent(By.Name("selected[]")))
-            {
-                Create(group);
-            }
+ 
             driver.FindElement(By.XPath("//div[@id='content']/form/span[" + index + "]/input")).Click();
 
             return this;
@@ -85,20 +108,7 @@ namespace addressbook_web_tests
             return this;
 
         }
-
-        public GroupHelper Modify(int LineGroup, GroupData group, GroupData newData)
-        {
-            manager.navigator.GoToGroupsPage();
-            SelectGroup(LineGroup,group);
-            InitGroupModification();
-            FillGroupsForm(newData);
-            SubmitGroupModification();
-            ReturnToGroupPage();
-
-            return this;
-        }
-
-      
+              
 
         public GroupHelper InitGroupModification()
         {
