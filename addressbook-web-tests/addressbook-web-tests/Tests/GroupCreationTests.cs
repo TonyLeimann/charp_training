@@ -6,11 +6,12 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
+using System.Collections.Generic;// коллекция
 
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class GroupCreationTests: AuthTestBase// наследник TestBase
+    public class GroupCreationTests: AuthTestBase// наследник AuthTestBase
     {
        
 
@@ -23,9 +24,19 @@ namespace addressbook_web_tests.Tests
              group.Header = "asd";
              group.Footer = "asd";
 
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
+            
             app.Groups.Create(group);
 
-            
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+            oldGroups.Add(group);
+            oldGroups.Sort();
+            newGroups.Sort();
+            Assert.AreEqual(oldGroups, newGroups);
+
+
+
+
         }
 
         [Test]
@@ -37,11 +48,35 @@ namespace addressbook_web_tests.Tests
              group.Header = "";
              group.Footer = "";
 
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
+
             app.Groups.Create(group);
-            
-            
+
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+            oldGroups.Add(group);
+            oldGroups.Sort();
+            newGroups.Sort();
+            Assert.AreEqual(oldGroups, newGroups);
         }
 
+        //[Test]
+        //public void BadEmptyGroupCreationTest()
+        //{
+
+
+        //    GroupData group = new GroupData("'asd");
+        //    group.Header = "";
+        //    group.Footer = "";
+
+        //    List<GroupData> oldGgroups = app.Groups.GetGroupList();
+
+        //    app.Groups.Create(group);
+
+        //    List<GroupData> newGroups = app.Groups.GetGroupList();
+
+        //    oldGgroups.Add(group);
+        //    Assert.AreEqual(oldGgroups.Count, newGroups.Count);
+        //}
 
 
     }

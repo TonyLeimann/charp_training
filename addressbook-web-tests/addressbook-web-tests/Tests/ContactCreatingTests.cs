@@ -6,6 +6,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
+using System.Collections.Generic;
 
 namespace addressbook_web_tests.Tests
 {
@@ -23,21 +24,34 @@ namespace addressbook_web_tests.Tests
             contact.Nick = "Madridista";
             contact.Middlename = "Blanco";
 
-            app.Contact.Create(contact); 
-          
+            List<ContactData> oldContacts = app.Contact.GetContactList();
+
+            app.Contact.Create(contact);
+
+            List<ContactData> newContacts = app.Contact.GetContactList();
+            oldContacts.Add(contact);
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
+
         }
 
 
         [Test]
         public void EmptyCreatingContactTest()
         {           
-            ContactData contact = new ContactData("",null);
-            contact.Company = null;
-            contact.Phone_mobile = null;
-            contact.Nick = null;
-            contact.Middlename = null;
+            ContactData contact = new ContactData("","");
+
+
+            List<ContactData> oldContacts = app.Contact.GetContactList();
 
             app.Contact.Create(contact);
+
+            List<ContactData> newContacts = app.Contact.GetContactList();
+            oldContacts.Add(contact);
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
         }
 
 

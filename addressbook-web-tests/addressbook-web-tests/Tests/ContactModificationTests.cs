@@ -22,10 +22,18 @@ namespace addressbook_web_tests.Tests
             edit_contact.Middlename = "Sanchez";
 
             app.Contact.FindContactAnotherCreate();
-            app.Contact.ModifyContact(2,edit_contact);
 
+            List<ContactData> oldContacts = app.Contact.GetContactList();
 
-           
+            app.Contact.ModifyContact(0,edit_contact);
+
+            List<ContactData> newContacts = app.Contact.GetContactList();
+            oldContacts[0].Firstname = edit_contact.Firstname;
+            oldContacts[0].Lastname = edit_contact.Lastname;
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
+
         }
 
 

@@ -20,8 +20,16 @@ namespace addressbook_web_tests.Tests
             newData.Footer = "text";
 
             app.Groups.FindGroupAnotherCreate();
-            app.Groups.GroupModify(1,newData);
 
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
+
+            app.Groups.GroupModify(0,newData);
+
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+            oldGroups[0].Name = newData.Name;
+            oldGroups.Sort();
+            newGroups.Sort();
+            Assert.AreEqual(oldGroups, newGroups);
         }
 
 

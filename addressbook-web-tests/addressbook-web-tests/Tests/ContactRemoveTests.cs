@@ -19,8 +19,15 @@ namespace addressbook_web_tests.Tests
 
             app.Contact.FindContactAnotherCreate();
 
-            app.Contact.Remove(2);
+            List<ContactData> oldContacts = app.Contact.GetContactList();
 
+            app.Contact.Remove(0);
+
+            List<ContactData> newContacts = app.Contact.GetContactList();
+
+            oldContacts.RemoveAt(0);
+
+            Assert.AreEqual(oldContacts, newContacts);//сравниваем списки
         }
 
 

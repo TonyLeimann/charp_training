@@ -1,7 +1,10 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -72,6 +75,7 @@ namespace addressbook_web_tests
         public ContactHelper ConfirmDeleteContact()
         {
             driver.SwitchTo().Alert().Accept();
+            Thread.Sleep(5000);
             return this;
         }
 
@@ -80,6 +84,7 @@ namespace addressbook_web_tests
 
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             return this;
+            
 
         }
 
@@ -87,7 +92,7 @@ namespace addressbook_web_tests
 
         public ContactHelper SelectContact(int Line)
         {
-            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ Line +"]/td/input")).Click();
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ (Line + 2) +"]/td/input")).Click();
             return this;
                       
         }
@@ -96,7 +101,7 @@ namespace addressbook_web_tests
         
         public ContactHelper EditContact(int tr)
         {
-            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + tr +"]/td[8]/a/img")).Click();
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (tr+2) +"]/td[8]/a/img")).Click();
             return this;
         }
         public ContactHelper UpdateContact()
@@ -118,5 +123,26 @@ namespace addressbook_web_tests
                         
         }
 
+
+
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            manager.Navigator.GoToHomePage();
+
+            ICollection<IWebElement> elements = driver.FindElements(By.Name("entry"));
+
+            for (int i = 0; i < elements.Count; i++)
+            {
+                
+                var lastName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i+2)  + "]/td[2]")).Text;
+                var firstName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i+2)  + "]/td[3]")).Text;
+
+                contacts.Add(new ContactData(firstName, lastName));
+
+            }
+
+            return contacts;
+        }
     }
 }
