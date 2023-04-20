@@ -14,6 +14,7 @@ namespace addressbook_web_tests
 {
     public class ContactHelper:HelperBase
     {
+        const int OFFSET = 2;
         public ContactHelper(ApplicationManager manager) : base(manager) { }
 
         public ContactHelper Create(ContactData contact)
@@ -47,6 +48,7 @@ namespace addressbook_web_tests
         public ContactHelper EnterContact()
         {
             driver.FindElement(By.XPath("//div[@id='content']/form/input[21]")).Click();
+            contactCache = null;
             return this;
         }
 
@@ -57,7 +59,6 @@ namespace addressbook_web_tests
             FillContactForm(edit_contact);
             UpdateContact();
             manager.Navigator.ReturnToHomePage();
-
             return this;
         }
 
@@ -68,8 +69,6 @@ namespace addressbook_web_tests
             DeleteContact();
             ConfirmDeleteContact();
             return this;
-
-
         }
 
         public ContactHelper ConfirmDeleteContact()
@@ -81,11 +80,9 @@ namespace addressbook_web_tests
 
         public ContactHelper DeleteContact()
         {
-
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            contactCache = null;
             return this;
-            
-
         }
 
       
@@ -93,8 +90,7 @@ namespace addressbook_web_tests
         public ContactHelper SelectContact(int Line)
         {
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ (Line + 2) +"]/td/input")).Click();
-            return this;
-                      
+            return this;       
         }
 
 
@@ -107,6 +103,7 @@ namespace addressbook_web_tests
         public ContactHelper UpdateContact()
         {
             driver.FindElement(By.XPath("//div[@id='content']/form/input[22]")).Click();
+            contactCache = null;
             return this;
         }
 
@@ -123,26 +120,49 @@ namespace addressbook_web_tests
                         
         }
 
-
+        private List<ContactData> contactCache = null;
+        
 
         public List<ContactData> GetContactList()
         {
-            List<ContactData> contacts = new List<ContactData>();
-            manager.Navigator.GoToHomePage();
 
-            ICollection<IWebElement> elements = driver.FindElements(By.Name("entry"));
-
-            for (int i = 0; i < elements.Count; i++)
+            if (contactCache == null)
             {
-                
-                var lastName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i+2)  + "]/td[2]")).Text;
-                var firstName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i+2)  + "]/td[3]")).Text;
+                contactCache = new List<ContactData>();
+                manager.Navigator.GoToHomePage();
 
-                contacts.Add(new ContactData(firstName, lastName));
+                ICollection<IWebElement> elements = driver.FindElements(By.Name("entry"));
 
+                int i = 0;
+                foreach (IWebElement element in elements) 
+                {
+                                       
+                    var id = element.FindElement(By.TagName("input")).GetAttribute("value");
+                    var lastName = element.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ (i+OFFSET) + "]/td[2]")).Text;
+                    var firstName = element.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ (i+OFFSET) +"]/td[3]")).Text;
+
+                    contactCache.Add(new ContactData(firstName, lastName) { ID = id });
+                    i++;
+                }
+
+                //for (int i = 0; i < elements.Count; i++)
+                //{
+                                              
+                //    var lastName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[2]")).Text;
+                //    var firstName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[3]")).Text;
+
+                //    contactCache.Add(new ContactData(firstName, lastName) { ID = id});
+
+                //}
             }
 
-            return contacts;
+            return new List<ContactData>(contactCache);
         }
+
+        public int GetContactCount()
+        {
+            return driver.FindElements(By.Name("entry")).Count;
+        }
+
     }
 }

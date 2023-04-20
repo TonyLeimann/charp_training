@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,8 +25,11 @@ namespace addressbook_web_tests.Tests
             app.Contact.FindContactAnotherCreate();
 
             List<ContactData> oldContacts = app.Contact.GetContactList();
+            ContactData oldData = oldContacts[0];
 
             app.Contact.ModifyContact(0,edit_contact);
+
+            Assert.AreEqual(oldContacts.Count, app.Contact.GetContactCount());
 
             List<ContactData> newContacts = app.Contact.GetContactList();
             oldContacts[0].Firstname = edit_contact.Firstname;
@@ -33,6 +37,16 @@ namespace addressbook_web_tests.Tests
             oldContacts.Sort();
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
+
+            foreach (ContactData contact in newContacts)
+            {
+                if (contact.ID == oldData.ID)
+                {
+                    Assert.AreEqual(edit_contact.Lastname, contact.Lastname);// ожидаемый с фактическим\
+                    Assert.AreEqual(edit_contact.Firstname, contact.Firstname);
+                }
+
+            }
 
         }
 

@@ -79,6 +79,7 @@ namespace addressbook_web_tests
         public GroupHelper SubmitGroupCreation()
         {
             driver.FindElement(By.Name("submit")).Click();
+            groupCache = null;
             return this;
         }
 
@@ -96,7 +97,6 @@ namespace addressbook_web_tests
         {
  
             driver.FindElement(By.XPath("//div[@id='content']/form/span[" + index + 1 + "]/input")).Click();// xPath нумерация с единицы, поэтому привели к общему виду в C# + 1
-
             return this;
         }
 
@@ -105,6 +105,7 @@ namespace addressbook_web_tests
         public GroupHelper DeleteGroup()
         {
             driver.FindElement(By.Name("delete")).Click();
+            groupCache = null;
             return this;
 
         }
@@ -122,20 +123,41 @@ namespace addressbook_web_tests
 
 
             driver.FindElement(By.Name("update")).Click();
+            groupCache = null;
             return this;
         }
 
+
+        private List<GroupData> groupCache = null;// сохраненный список групп
+
+
+
+
         public List<GroupData> GetGroupList()
         {
-            List<GroupData> groups = new List<GroupData>();
-            manager.Navigator.GoToGroupsPage();
-            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("span.group"));
-            foreach (IWebElement element in elements) 
-            {
-                groups.Add(new GroupData(element.Text));
-            }
-            return groups;
 
+            if (groupCache == null) 
+            { 
+                groupCache = new List<GroupData>();
+                manager.Navigator.GoToGroupsPage();
+                ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("span.group"));
+                foreach (IWebElement element in elements)
+                {
+             
+                   groupCache.Add(new GroupData(element.Text) {
+                   ID = element.FindElement(By.TagName("input")).GetAttribute("value")
+                   });
+                }
+            }
+
+
+            return new List<GroupData>(groupCache);// коппия из старого кэша
+
+        }
+
+        public int GetGroupCount()
+        {
+            return driver.FindElements(By.CssSelector("span.group")).Count;
         }
     }
 }

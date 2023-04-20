@@ -28,6 +28,8 @@ namespace addressbook_web_tests.Tests
             
             app.Groups.Create(group);
 
+            Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
+
             List<GroupData> newGroups = app.Groups.GetGroupList();
             oldGroups.Add(group);
             oldGroups.Sort();
@@ -52,6 +54,8 @@ namespace addressbook_web_tests.Tests
 
             app.Groups.Create(group);
 
+            Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
+
             List<GroupData> newGroups = app.Groups.GetGroupList();
             oldGroups.Add(group);
             oldGroups.Sort();
@@ -59,24 +63,6 @@ namespace addressbook_web_tests.Tests
             Assert.AreEqual(oldGroups, newGroups);
         }
 
-        //[Test]
-        //public void BadEmptyGroupCreationTest()
-        //{
-
-
-        //    GroupData group = new GroupData("'asd");
-        //    group.Header = "";
-        //    group.Footer = "";
-
-        //    List<GroupData> oldGgroups = app.Groups.GetGroupList();
-
-        //    app.Groups.Create(group);
-
-        //    List<GroupData> newGroups = app.Groups.GetGroupList();
-
-        //    oldGgroups.Add(group);
-        //    Assert.AreEqual(oldGgroups.Count, newGroups.Count);
-        //}
 
 
     }

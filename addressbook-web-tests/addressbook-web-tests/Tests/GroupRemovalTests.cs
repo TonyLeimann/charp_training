@@ -21,9 +21,19 @@ namespace addressbook_web_tests.Tests
 
             app.Groups.Remove(0);
 
+            Assert.AreEqual(oldGroups.Count - 1, app.Groups.GetGroupCount());
+
             List<GroupData> newGroups = app.Groups.GetGroupList();
+            GroupData toBeRevoved = oldGroups[0];
+
             oldGroups.RemoveAt(0);// удалить первый элемент в списке
             Assert.AreEqual(oldGroups, newGroups);// сравниваниваем списки
+
+            foreach (GroupData group in newGroups)
+            {
+
+                Assert.AreNotEqual(group.ID, toBeRevoved.ID);
+            }
         }
                  
 
