@@ -20,7 +20,7 @@ namespace addressbook_web_tests.Tests
         {    
             ContactData contact = new ContactData("Raul","Gonzales");
             contact.Company = "Spain";
-            contact.Phone_mobile = "+7 777 777 77 77";
+            contact.Mphone = "+7 777 777 77 77";
             contact.Nick = "Madridista";
             contact.Middlename = "Blanco";
 

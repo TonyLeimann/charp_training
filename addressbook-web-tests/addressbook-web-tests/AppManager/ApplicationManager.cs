@@ -49,7 +49,6 @@ namespace addressbook_web_tests
             {
 
             }
-
         }
 
         public static ApplicationManager GetInstance()// global
@@ -62,16 +61,10 @@ namespace addressbook_web_tests
             }
             return app.Value;
         }
-
-
         public LoginHelper Auth { get { return loginHelper; } }
         public NavigationHelper Navigator { get { return navigator; } }
         public GroupHelper Groups { get { return groupHelper; } }
         public ContactHelper Contact { get { return contactHelper; } }
-
-
-
-
 
     }
 }

@@ -16,7 +16,6 @@ namespace addressbook_web_tests.Tests
 
         public void ContactRemoveTest()
         {
-
             app.Contact.FindContactAnotherCreate();
 
             List<ContactData> oldContacts = app.Contact.GetContactList();
@@ -33,21 +32,10 @@ namespace addressbook_web_tests.Tests
 
             Assert.AreEqual(oldContacts, newContacts);//сравниваем списки
 
-
             foreach (ContactData contact in newContacts)
             {
-
                 Assert.AreNotEqual(contact.ID, toBeRevoved.ID);
             }
-
         }
-
-
-
-
-
-
-
-
     }
 }

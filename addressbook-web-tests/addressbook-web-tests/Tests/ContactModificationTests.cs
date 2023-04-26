@@ -18,7 +18,7 @@ namespace addressbook_web_tests.Tests
 
             ContactData edit_contact = new ContactData("Iker", "Casilias");
             edit_contact.Company = "Real Madrid";
-            edit_contact.Phone_mobile = "+ 7 999 234 23 23";
+            edit_contact.Mphone = "+ 7 999 234 23 23";
             edit_contact.Nick = "Kipper";
             edit_contact.Middlename = "Sanchez";
 

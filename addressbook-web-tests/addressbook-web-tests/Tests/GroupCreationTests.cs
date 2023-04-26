@@ -13,13 +13,9 @@ namespace addressbook_web_tests.Tests
     [TestFixture]
     public class GroupCreationTests: AuthTestBase// наследник AuthTestBase
     {
-       
-
         [Test]
         public void GroupCreationTest()
-        {
-
-            
+        {  
             GroupData group = new GroupData("asd");
              group.Header = "asd";
              group.Footer = "asd";
@@ -35,17 +31,11 @@ namespace addressbook_web_tests.Tests
             oldGroups.Sort();
             newGroups.Sort();
             Assert.AreEqual(oldGroups, newGroups);
-
-
-
-
         }
 
         [Test]
         public void EmptyGroupCreationTest()
         {
-
-            
             GroupData group = new GroupData("");
              group.Header = "";
              group.Footer = "";
@@ -62,8 +52,5 @@ namespace addressbook_web_tests.Tests
             newGroups.Sort();
             Assert.AreEqual(oldGroups, newGroups);
         }
-
-
-
     }
 }

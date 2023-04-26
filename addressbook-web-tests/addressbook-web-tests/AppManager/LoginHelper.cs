@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,11 +51,15 @@ namespace addressbook_web_tests
 
         public bool IsLoggedIn(AccountData account)
         {
-            return IsLoggedIn()
-                && driver.FindElement(By.Name("logout")).FindElement(By.TagName("b")).Text
-                == "(" + account.Username + ")";
+            return IsLoggedIn() &&
+                   GetLoggetUserName() == account.Username;
+             
+        }
 
-
+        public string GetLoggetUserName()
+        {
+           string text =  driver.FindElement(By.Name("logout")).FindElement(By.TagName("b")).Text;
+            return text.Substring(1, text.Length - 2);
         }
     }
 }
