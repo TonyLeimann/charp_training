@@ -173,7 +173,7 @@ namespace addressbook_web_tests
 
         public override string ToString()
         {
-            return Firstname + " " + Lastname;
+            return "firstname = " + Firstname + "\nmiddlename = " + Middlename + "\nlastname = " + Lastname;
         }
     }
 }

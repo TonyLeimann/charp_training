@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 namespace addressbook_web_tests.Tests
 {
     public class TestBase
-    {
-        
+    {      
         protected ApplicationManager app;    
  
         [OneTimeSetUp]
@@ -20,6 +19,17 @@ namespace addressbook_web_tests.Tests
         {
             app = ApplicationManager.GetInstance();
 
+        }
+        public static Random rand = new Random();
+        public static string GenerateRandomsString(int max)
+        {
+           int number = Convert.ToInt32(rand.NextDouble() * max);
+           StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < number; i++)
+            {
+              stringBuilder.Append(Convert.ToChar(97 + Convert.ToInt32(rand.NextDouble() * 25)));
+            }
+            return stringBuilder.ToString();
         }
 
     }

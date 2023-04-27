@@ -38,17 +38,30 @@ namespace addressbook_web_tests.Tests
             Assert.AreEqual(oldContacts, newContacts);
 
         }
+        public static IEnumerable<ContactData> RandomContactDataProvider()
+        {
+            List<ContactData> contacts = new List<ContactData>();
 
-
-        [Test]
-        public void EmptyCreatingContactTest()
-        {           
-            ContactData contact = new ContactData("","");
+            for (int i = 0; i < 5; i++)
+            {
+                contacts.Add(new ContactData(GenerateRandomsString(10), GenerateRandomsString(10))
+                {
+                    Nick = GenerateRandomsString(10),
+                    Company = GenerateRandomsString(10),
+                    Middlename = GenerateRandomsString(10),
+                });
+            }
+            return contacts;
+        }
+        [Test, TestCaseSource("RandomContactDataProvider")]
+        public void CreatingContactTest(ContactData contact)
+        {
 
 
             List<ContactData> oldContacts = app.Contact.GetContactList();
 
             app.Contact.Create(contact);
+
 
             Assert.AreEqual(oldContacts.Count + 1, app.Contact.GetContactCount());
 
@@ -58,10 +71,5 @@ namespace addressbook_web_tests.Tests
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
         }
-
-
-
-
-
     }
 }

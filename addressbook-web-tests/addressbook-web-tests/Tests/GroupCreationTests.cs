@@ -33,12 +33,24 @@ namespace addressbook_web_tests.Tests
             Assert.AreEqual(oldGroups, newGroups);
         }
 
-        [Test]
-        public void EmptyGroupCreationTest()
+        public static IEnumerable<GroupData> RandomGroupDataProvider()
         {
-            GroupData group = new GroupData("");
-             group.Header = "";
-             group.Footer = "";
+            List<GroupData> groups = new List<GroupData>();
+            for (int i = 0; i < 5; i++)
+            {
+                groups.Add(new GroupData(GenerateRandomsString(30))
+                {
+                    Header = GenerateRandomsString(100),
+                    Footer = GenerateRandomsString(100)
+                });
+            }
+
+            return groups;
+        }
+        [Test,TestCaseSource("RandomGroupDataProvider")]
+        public void GroupCreationTest(GroupData group)
+        {
+            
 
             List<GroupData> oldGroups = app.Groups.GetGroupList();
 
