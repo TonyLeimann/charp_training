@@ -17,7 +17,12 @@ namespace addressbook_web_tests
         { 
             Name = name;
         }
-            
+        public GroupData()
+
+        {
+
+        }
+
         public bool Equals(GroupData other)// функция сравнения
         {
             if (Object.ReferenceEquals(other, null))// тот объект с которым мы сравниваем это null
