@@ -5,11 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace addressbook_web_tests
 {
     public class ContactData:IEquatable<ContactData>,IComparable<ContactData>   
     {
+       
+
         private string allEmails;
         private string allPhones;
         private string infoAboutDetail;
@@ -30,6 +34,7 @@ namespace addressbook_web_tests
         public string Lastname { get; set; }
         public string Company { get; set; }
         public string Nick { get; set; }
+        [JsonIgnore]
         public string ID { get; set; }
         public string Mphone { get; set; }
         public string Hphone { get;  set; }
@@ -38,7 +43,10 @@ namespace addressbook_web_tests
         public string Email2 { get; set; }
         public string Email3 { get; set; }
         public string Address { get;  set; }
-        public string AllPhones
+        [XmlIgnore]//The XmlSerializer ignores this field.
+        //[JsonIgnore] 
+
+        public string  AllPhones
         {
             get
             {
@@ -64,6 +72,8 @@ namespace addressbook_web_tests
             }
             return Regex.Replace(phone, "[ -()]", "") + "\r\n";
         }
+        [XmlIgnore] // The XmlSerializer ignores this field.
+        //[JsonIgnore]
         public string AllEmails
         {
             get

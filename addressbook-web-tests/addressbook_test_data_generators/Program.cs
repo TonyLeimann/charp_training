@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using addressbook_web_tests;
 using addressbook_web_tests.Tests;
 using System.Diagnostics.Eventing.Reader;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace addressbook_test_data_generators
 {
@@ -19,7 +20,7 @@ namespace addressbook_test_data_generators
         {
             string dataType = args[0];
             int count = Convert.ToInt32(args[1]); // колличество тестовых данных, которые будем генерировать
-            StreamWriter writer = new StreamWriter(args[2]);
+            string filename = args[2];
             string format = args[3];
 
             if (dataType == "group") 
@@ -34,26 +35,35 @@ namespace addressbook_test_data_generators
                         Footer = TestBase.GenerateRandomsString(10)
                     });
                 }
-
-                if (format == "csv")
+                if(format == "excel")
                 {
-                    writeGroupsToCsvFile(groups, writer);
-                }
-                else if (format == "xml")
-                {
-                    writeGroupsToXmlFile(groups, writer);
-                }
-                else if (format == "json")
-                {
-                    writeGroupsToJsonFile(groups, writer);
+                    writeGroupsToExcelFile(groups, filename);
                 }
                 else
                 {
-                    Console.WriteLine("Непонятный формат " + format);
+                    StreamWriter writer = new StreamWriter(filename);
+
+                    if (format == "csv")
+                    {
+                        writeGroupsToCsvFile(groups, writer);
+                    }
+                    else if (format == "xml")
+                    {
+                        writeGroupsToXmlFile(groups, writer);
+                    }
+                    else if (format == "json")
+                    {
+                        writeGroupsToJsonFile(groups, writer);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Непонятный формат " + format);
+                    }
+
+                    writer.Close();
+
                 }
-
-                writer.Close();
-
+       
             }
             else if(dataType == "contact") 
             {
@@ -68,32 +78,39 @@ namespace addressbook_test_data_generators
                         Company = TestBase.GenerateRandomsString(10)
                     });
                 }
+                if (format == "excel")
+                {
+                    writeContactsToExcelFile(contacts, filename);
+                }
+                else 
+                {
+                    StreamWriter writer = new StreamWriter(filename);// уже отрытый StreamWriter
 
-                if (format == "csv")
-                {
-                    writeContactsToCsvFile(contacts, writer);
-                }
-                else if(format == "xml") 
-                {
-                    writeContactsToXmlFile(contacts, writer);
-                }
-                else if(format == "json")
-                {
-                    writeContactsToJsonFile(contacts, writer);
-                }
-                else
-                {
-                    Console.WriteLine("Непонятный формат " + format);
+                    if (format == "csv")
+                    {
+                        writeContactsToCsvFile(contacts, writer);
+                    }
+                    else if (format == "xml")
+                    {
+                        writeContactsToXmlFile(contacts, writer);
+                    }
+                    else if (format == "json")
+                    {
+                        writeContactsToJsonFile(contacts, writer);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Непонятный формат " + format);
+                    }
+                    writer.Close();
                 }
             }
             else 
             {
-                Console.WriteLine("Непонятный тип данных " + format);
-            }
-            writer.Close();
-
+                Console.WriteLine("Непонятный тип данных " + dataType);
+            }           
         }
-  
+
         static void writeGroupsToCsvFile(List<GroupData> groups, StreamWriter writer)
         {
             foreach (GroupData group in groups)
@@ -130,6 +147,56 @@ namespace addressbook_test_data_generators
         static void writeContactsToJsonFile(List<ContactData> contacts, StreamWriter writer)
         {
             writer.Write(JsonConvert.SerializeObject(contacts, Newtonsoft.Json.Formatting.Indented));
+        }
+
+        static void writeGroupsToExcelFile(List<GroupData> groups, string filename)
+        {
+            Excel.Application app = new Excel.Application();
+            app.Visible = true; // запуск Excel
+            Excel.Workbook wb = app.Workbooks.Add(); // создание нового документа
+            Excel.Worksheet sheet = wb.ActiveSheet;// страница Excel
+
+            int row = 1;
+            foreach (GroupData group in groups)
+            {
+                sheet.Cells[row, 1] = group.Name;
+                sheet.Cells[row, 2] = group.Header;
+                sheet.Cells[row, 3] = group.Footer;// вписываем текст на странице
+                row++;
+            }
+            string fullpath = Path.Combine(Directory.GetCurrentDirectory(), filename);// путь куда сохранять
+            File.Delete(fullpath);
+            wb.SaveAs(fullpath);
+
+            wb.Close();
+            app.Visible = false;
+            app.Quit();
+        }
+
+        static void writeContactsToExcelFile(List<ContactData> contacts, string filename)
+        {
+            Excel.Application app = new Excel.Application();
+            app.Visible = true; // запуск Excel
+            Excel.Workbook wb = app.Workbooks.Add(); // создание нового документа
+            Excel.Worksheet sheet = wb.ActiveSheet;// страница Excel
+
+            int row = 1;
+            foreach (ContactData contact in contacts)
+            {
+                sheet.Cells[row, 1] = contact.Firstname;// вписываем текст на странице
+                sheet.Cells[row, 2] = contact.Middlename;
+                sheet.Cells[row, 3] = contact.Lastname;// вписываем текст на странице
+                sheet.Cells[row, 4] = contact.Nick;
+                sheet.Cells[row, 5] = contact.Company;
+                row++;
+            }
+            string fullpath = Path.Combine(Directory.GetCurrentDirectory(), filename);// путь куда сохранять
+            File.Delete(fullpath);
+            wb.SaveAs(fullpath);
+
+            wb.Close();
+            app.Visible = false;
+            app.Quit();
         }
     }
 }

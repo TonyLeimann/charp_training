@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace addressbook_web_tests.Tests
 {
@@ -151,5 +152,52 @@ namespace addressbook_web_tests.Tests
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
         }
+
+
+
+
+        public static IEnumerable<ContactData> ContactDataFromExcelFile() // метод чтения данных
+        {
+
+            List<ContactData> contacts = new List<ContactData>();
+            Excel.Application app = new Excel.Application();
+            Excel.Workbook workbook = app.Workbooks.Open(Path.Combine(Directory.GetCurrentDirectory(), @"contacts.xlsx"));
+            Excel.Worksheet worksheet = workbook.ActiveSheet;
+            Excel.Range range = worksheet.UsedRange;//прямоугольник содержащий данные 
+            for (int i = 1; i <= range.Rows.Count; i++)
+            {
+                contacts.Add(new ContactData()
+                {
+                    Firstname = range.Cells[i, 1].Value,
+                    Middlename = range.Cells[i, 2].Value,
+                    Lastname = range.Cells[i, 3].Value,
+                    Nick = range.Cells[i, 4].Value,
+                    Company = range.Cells[i, 5].Value
+                });
+            }
+            workbook.Close();
+            app.Visible = false;
+            app.Quit();
+            return contacts;
+
+        }
+
+
+
+        [Test, TestCaseSource("ContactDataFromExcelFile")]
+        public void CreatingContactTestWithExcelFile(ContactData contact)
+        {
+            List<ContactData> oldContacts = app.Contact.GetContactList();
+            app.Contact.Create(contact);
+
+            Assert.AreEqual(oldContacts.Count + 1, app.Contact.GetContactCount());
+
+            List<ContactData> newContacts = app.Contact.GetContactList();
+            oldContacts.Add(contact);
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
+        }
+
     }
 }

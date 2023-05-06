@@ -12,6 +12,7 @@ using NUnit.Framework.Constraints;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace addressbook_web_tests.Tests
 {
@@ -156,8 +157,47 @@ namespace addressbook_web_tests.Tests
             Assert.AreEqual(oldGroups, newGroups);
         }
 
+        public static IEnumerable<GroupData> GroupDataFromExcelFile() // метод чтения данных
+        {
+
+            List<GroupData> groups = new List<GroupData>();
+            Excel.Application app = new Excel.Application();
+            Excel.Workbook workbook = app.Workbooks.Open(Path.Combine(Directory.GetCurrentDirectory(), @"groups.xlsx"));
+            Excel.Worksheet worksheet = workbook.ActiveSheet;
+            Excel.Range range = worksheet.UsedRange;//прямоугольник содержащий данные 
+            for (int i = 1; i <= range.Rows.Count; i++)
+            {
+                groups.Add(new GroupData()
+                {
+                    Name = range.Cells[i, 1].Value,
+                    Header = range.Cells[i, 2].Value,
+                    Footer = range.Cells[i, 3].Value
+                });
+            }
+            workbook.Close();
+            app.Visible = false;
+            app.Quit();
+            return groups;
 
 
+
+        }
+
+        [Test, TestCaseSource("GroupDataFromExcelFile")]
+        public void GroupCreationTestExcel(GroupData group)
+        {
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
+
+            app.Groups.Create(group);
+
+            Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
+
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+            oldGroups.Add(group);
+            oldGroups.Sort();
+            newGroups.Sort();
+            Assert.AreEqual(oldGroups, newGroups);
+        }
 
 
 
