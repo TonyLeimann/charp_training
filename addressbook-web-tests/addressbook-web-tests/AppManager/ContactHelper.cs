@@ -30,7 +30,6 @@ namespace addressbook_web_tests
             return this;
         }
               
-      
         public ContactHelper AddContact()
         {
             driver.FindElement(By.LinkText("add new")).Click();
@@ -64,6 +63,16 @@ namespace addressbook_web_tests
             manager.Navigator.ReturnToHomePage();
             return this;
         }
+
+        public ContactHelper ModifyContact(ContactData oldData, ContactData edit_contact)
+        {
+            manager.Navigator.GoToHomePage();
+            EditContact(oldData.ID);
+            FillContactForm(edit_contact);
+            UpdateContact();
+            manager.Navigator.ReturnToHomePage();
+            return this;
+        }
         public ContactHelper Remove(int Line)
         {
             manager.Navigator.GoToHomePage();
@@ -72,6 +81,17 @@ namespace addressbook_web_tests
             ConfirmDeleteContact();
             return this;
         }
+
+        public ContactHelper Remove(ContactData contact)
+        {
+            manager.Navigator.GoToHomePage();
+            SelectContact(contact.ID);
+            DeleteContact();
+            ConfirmDeleteContact();
+            return this;
+        }
+
+
         public ContactHelper ConfirmDeleteContact()
         {
             driver.SwitchTo().Alert().Accept();
@@ -88,12 +108,26 @@ namespace addressbook_web_tests
         {
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr["+ (Line + 2) +"]/td/input")).Click();
             return this;       
-        }  
+        }
+
+
+        public ContactHelper SelectContact(String id)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @value = '" + id + "'])")).Click();
+           
+            return this;
+        }
         public ContactHelper EditContact(int tr)
         {
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (tr+2) +"]/td[8]/a/img")).Click();
             return this;
         }
+        public ContactHelper EditContact(String id)
+        {
+            driver.FindElement(By.CssSelector("a[href*='edit.php?id="+ id +"']")).Click();
+            return this;
+        }
+
         public ContactHelper UpdateContact()
         {
             driver.FindElement(By.XPath("//div[@id='content']/form/input[22]")).Click();
@@ -137,12 +171,6 @@ namespace addressbook_web_tests
                     contactCache.Add(new ContactData(firstName, lastName) { ID = id });
                     i++;
                 }
-                //for (int i = 0; i < elements.Count; i++)
-                //{                             
-                //    var lastName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[2]")).Text;
-                //    var firstName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[3]")).Text;
-                //    contactCache.Add(new ContactData(firstName, lastName) { ID = id});
-                //}
             }
 
             return new List<ContactData>(contactCache);

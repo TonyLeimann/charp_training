@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 namespace addressbook_web_tests.Tests
 {
     public class TestBase
-    {      
+    {
+        public static bool NEED_LONG_UI_CHECK = true;
         protected ApplicationManager app;    
  
         [OneTimeSetUp]

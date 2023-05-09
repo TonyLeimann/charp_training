@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinqToDB.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace addressbook_web_tests
 {
+    [Table(Name = "group_list")]
     public class GroupData:IEquatable<GroupData>,IComparable<GroupData>
     // IEquatable<GroupData> для этих объектов определена функция сравнения, его можно сравнивать с другими объектами типа GroupDate 
     // IComparable<GroupData>  
     {
-
-
         public GroupData (string name)
         
         { 
@@ -58,15 +58,21 @@ namespace addressbook_web_tests
             return Name.CompareTo(other.Name);
 
         }
-
+        [Column(Name = "group_name"),NotNull]
         public string Name { get; set; }
-      
+        [Column(Name = "group_header"),NotNull]
         public string Header { get; set; }
-
+        [Column(Name = "group_footer"), NotNull]
         public string Footer { get; set; }
-
+        [Column(Name = "group_id"),PrimaryKey,Identity]
         public string ID { get; set; }
  
-
+        public static List<GroupData> GetAll()
+        {
+            using (AddressBookDB db = new AddressBookDB()) // установка соединения
+            {
+                return (from g in db.Groups select g).ToList();
+            }
+        }
     }
 }

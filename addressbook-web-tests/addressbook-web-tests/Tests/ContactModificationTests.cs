@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class ContactModificationTests: AuthTestBase
+    public class ContactModificationTests: ContactTestBase
     {
         [Test]
 
         public void ContactModificationTest()
         {
-
             ContactData edit_contact = new ContactData("Iker", "Casilias");
             edit_contact.Company = "Real Madrid";
             edit_contact.Mphone = "+ 7 999 234 23 23";
@@ -23,15 +22,15 @@ namespace addressbook_web_tests.Tests
             edit_contact.Middlename = "Sanchez";
 
             app.Contact.FindContactAnotherCreate();
-
-            List<ContactData> oldContacts = app.Contact.GetContactList();
+                        
+            List<ContactData> oldContacts = ContactData.GetAll();
             ContactData oldData = oldContacts[0];
-
-            app.Contact.ModifyContact(0,edit_contact);
+                     
+            app.Contact.ModifyContact(oldData, edit_contact);
 
             Assert.AreEqual(oldContacts.Count, app.Contact.GetContactCount());
 
-            List<ContactData> newContacts = app.Contact.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts[0].Firstname = edit_contact.Firstname;
             oldContacts[0].Lastname = edit_contact.Lastname;
             oldContacts.Sort();
@@ -42,7 +41,7 @@ namespace addressbook_web_tests.Tests
             {
                 if (contact.ID == oldData.ID)
                 {
-                    Assert.AreEqual(edit_contact.Lastname, contact.Lastname);// ожидаемый с фактическим\
+                    Assert.AreEqual(edit_contact.Lastname, contact.Lastname);// ожидаемый с фактическим
                     Assert.AreEqual(edit_contact.Firstname, contact.Firstname);
                 }
 

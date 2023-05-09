@@ -23,6 +23,7 @@ namespace addressbook_web_tests
             ReturnToGroupPage();
             return this;
         }
+
         public GroupHelper Remove(int index)
         {
             manager.Navigator.GoToGroupsPage();
@@ -31,6 +32,17 @@ namespace addressbook_web_tests
             ReturnToGroupPage();
             return this;
         }
+
+        public GroupHelper Remove(GroupData group)
+        {
+            manager.Navigator.GoToGroupsPage();
+
+            SelectGroup(group.ID);
+            DeleteGroup();
+            ReturnToGroupPage();
+            return this;
+        }
+
         public GroupHelper GroupModify(int groupLine, GroupData group_mod)
         {
             manager.navigator.GoToGroupsPage();
@@ -42,6 +54,21 @@ namespace addressbook_web_tests
 
             return this;
         }
+
+
+        public GroupHelper GroupModify(GroupData oldData, GroupData group_mod)
+        {
+            manager.navigator.GoToGroupsPage();
+            SelectGroup(oldData.ID);
+            InitGroupModification();
+            FillGroupsForm(group_mod);
+            SubmitGroupModification();
+            ReturnToGroupPage();
+
+            return this;
+
+        }
+
         public GroupHelper FindGroupAnotherCreate()// для случия, когда нет группы для удаления
         {
             manager.Navigator.GoToGroupsPage();
@@ -84,6 +111,12 @@ namespace addressbook_web_tests
             driver.FindElement(By.XPath("//div[@id='content']/form/span[" + index + 1 + "]/input")).Click();// xPath нумерация с единицы, поэтому привели к общему виду в C# + 1
             return this;
         }
+        public GroupHelper SelectGroup(String id)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @value = '"+ id +"'])")).Click();
+            return this;
+        }
+
         public GroupHelper DeleteGroup()
         {
             driver.FindElement(By.Name("delete")).Click();
@@ -103,9 +136,6 @@ namespace addressbook_web_tests
             return this;
         }
         private List<GroupData> groupCache = null;// сохраненный список групп
-
-
-
 
         public List<GroupData> GetGroupList()
         {
@@ -145,5 +175,7 @@ namespace addressbook_web_tests
         {
             return driver.FindElements(By.CssSelector("span.group")).Count;
         }
+
+
     }
 }

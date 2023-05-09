@@ -15,7 +15,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class ContactCreatingTests: AuthTestBase
+    public class ContactCreatingTests: ContactTestBase
     {
        
         [Test]
@@ -27,53 +27,35 @@ namespace addressbook_web_tests.Tests
             contact.Nick = "Madridista";
             contact.Middlename = "Blanco";
 
-            List<ContactData> oldContacts = app.Contact.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
 
             app.Contact.Create(contact);
 
            
             Assert.AreEqual(oldContacts.Count + 1, app.Contact.GetContactCount());
 
-            List<ContactData> newContacts = app.Contact.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts.Add(contact);
             oldContacts.Sort();
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
 
         }
-        //public static IEnumerable<ContactData> RandomContactDataProvider()
-        //{
-        //    List<ContactData> contacts = new List<ContactData>();
+        public static IEnumerable<ContactData> RandomContactDataProvider()
+        {
+            List<ContactData> contacts = new List<ContactData>();
 
-        //    for (int i = 0; i < 5; i++)
-        //    {
-        //        contacts.Add(new ContactData(GenerateRandomsString(10), GenerateRandomsString(10))
-        //        {
-        //            Nick = GenerateRandomsString(10),
-        //            Company = GenerateRandomsString(10),
-        //            Middlename = GenerateRandomsString(10),
-        //        });
-        //    }
-        //    return contacts;
-        //}
-        //[Test, TestCaseSource("RandomContactDataProvider")]
-        //public void CreatingContactTest(ContactData contact)
-        //{
-
-        //    List<ContactData> oldContacts = app.Contact.GetContactList();
-
-        //    app.Contact.Create(contact);
-
-
-        //    Assert.AreEqual(oldContacts.Count + 1, app.Contact.GetContactCount());
-
-        //    List<ContactData> newContacts = app.Contact.GetContactList();
-        //    oldContacts.Add(contact);
-        //    oldContacts.Sort();
-        //    newContacts.Sort();
-        //    Assert.AreEqual(oldContacts, newContacts);
-        //}
-
+            for (int i = 0; i < 5; i++)
+            {
+                contacts.Add(new ContactData(GenerateRandomsString(10), GenerateRandomsString(10))
+                {
+                    Nick = GenerateRandomsString(10),
+                    Company = GenerateRandomsString(10),
+                    Middlename = GenerateRandomsString(10),
+                });
+            }
+            return contacts;
+        }
 
         public static IEnumerable<ContactData> ContactDataFromCsvFile()
         {
@@ -93,21 +75,6 @@ namespace addressbook_web_tests.Tests
             return contacts;
         }
 
-        [Test, TestCaseSource("ContactDataFromCsvFile")]
-        public void CreatingContactTestWithCsvFile(ContactData contact)
-        {
-            List<ContactData> oldContacts = app.Contact.GetContactList();
-            app.Contact.Create(contact);
-
-            Assert.AreEqual(oldContacts.Count + 1, app.Contact.GetContactCount());
-
-            List<ContactData> newContacts = app.Contact.GetContactList();
-            oldContacts.Add(contact);
-            oldContacts.Sort();
-            newContacts.Sort();
-            Assert.AreEqual(oldContacts, newContacts);
-        }
-
         public static IEnumerable<ContactData> ContactDataFromXmlFile()
         {
             List<ContactData> contacts = new List<ContactData>();
@@ -118,44 +85,11 @@ namespace addressbook_web_tests.Tests
 
         }
 
-        [Test, TestCaseSource("ContactDataFromXmlFile")]
-        public void CreatingContactTestWithXmlFile(ContactData contact)
-        {
-            List<ContactData> oldContacts = app.Contact.GetContactList();
-            app.Contact.Create(contact);
-
-            Assert.AreEqual(oldContacts.Count + 1, app.Contact.GetContactCount());
-
-            List<ContactData> newContacts = app.Contact.GetContactList();
-            oldContacts.Add(contact);
-            oldContacts.Sort();
-            newContacts.Sort();
-            Assert.AreEqual(oldContacts, newContacts);
-        }
         public static IEnumerable<ContactData> ContactDataFromJsonFile()
         {
             return JsonConvert.DeserializeObject<List<ContactData>>(File.ReadAllText(@"contacts.json"));
 
         }
-
-        [Test, TestCaseSource("ContactDataFromJsonFile")]
-        public void CreatingContactTestWithJsonFile(ContactData contact)
-        {
-            List<ContactData> oldContacts = app.Contact.GetContactList();
-            app.Contact.Create(contact);
-
-            Assert.AreEqual(oldContacts.Count + 1, app.Contact.GetContactCount());
-
-            List<ContactData> newContacts = app.Contact.GetContactList();
-            oldContacts.Add(contact);
-            oldContacts.Sort();
-            newContacts.Sort();
-            Assert.AreEqual(oldContacts, newContacts);
-        }
-
-
-
-
         public static IEnumerable<ContactData> ContactDataFromExcelFile() // метод чтения данных
         {
 
@@ -183,21 +117,40 @@ namespace addressbook_web_tests.Tests
         }
 
 
-
-        [Test, TestCaseSource("ContactDataFromExcelFile")]
-        public void CreatingContactTestWithExcelFile(ContactData contact)
+        [Test, TestCaseSource("ContactDataFromJsonFile")]
+        public void CreatingContactTestWithJsonFile(ContactData contact)
         {
-            List<ContactData> oldContacts = app.Contact.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
             app.Contact.Create(contact);
 
             Assert.AreEqual(oldContacts.Count + 1, app.Contact.GetContactCount());
 
-            List<ContactData> newContacts = app.Contact.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts.Add(contact);
             oldContacts.Sort();
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
         }
+
+        [Test]
+
+        public void TestDBConnectivity()
+        {
+            DateTime now = DateTime.Now;
+            List<ContactData> fromUI = app.Contact.GetContactList();
+            DateTime after = DateTime.Now;
+            Console.WriteLine("UI: " + after.Subtract(now));
+
+            now = DateTime.Now;
+            List<ContactData> fromDB = ContactData.GetAll();
+            after = DateTime.Now;
+            Console.WriteLine("DB: " + after.Subtract(now));
+        }
+
+
+
+
+
 
     }
 }

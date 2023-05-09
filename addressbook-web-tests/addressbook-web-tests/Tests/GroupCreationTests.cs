@@ -13,11 +13,13 @@ using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Excel = Microsoft.Office.Interop.Excel;
+using LinqToDB;
+using System.Linq;
 
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class GroupCreationTests: AuthTestBase// наследник AuthTestBase
+    public class GroupCreationTests: GroupTestBase
     {
         [Test]
         public void GroupCreationTest()
@@ -54,22 +56,6 @@ namespace addressbook_web_tests.Tests
             return groups;
         }
 
-        //[Test, TestCaseSource("RandomGroupDataProvider")]
-        //public void Random(GroupData group)
-        //{
-        //    List<GroupData> oldGroups = app.Groups.GetGroupList();
-
-        //    app.Groups.Create(group);
-
-        //    Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
-
-        //    List<GroupData> newGroups = app.Groups.GetGroupList();
-        //    oldGroups.Add(group);
-        //    oldGroups.Sort();
-        //    newGroups.Sort();
-        //    Assert.AreEqual(oldGroups, newGroups);
-        //}
-
         public static IEnumerable<GroupData> GroupDataFromCsvFile()
         {
             List<GroupData> groups = new List<GroupData>();
@@ -90,71 +76,17 @@ namespace addressbook_web_tests.Tests
             return groups;
         }
 
-
-        [Test, TestCaseSource("GroupDataFromCsvFile")]
-        public void GroupCreationTestWithCsv(GroupData group)
-        {
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
-
-            app.Groups.Create(group);
-
-            Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
-
-            List<GroupData> newGroups = app.Groups.GetGroupList();
-            oldGroups.Add(group);
-            oldGroups.Sort();
-            newGroups.Sort();
-            Assert.AreEqual(oldGroups, newGroups);
-        }
-
         public static IEnumerable<GroupData> GroupDataFromXmlFile()
         {
-
             return (List<GroupData>) // приведение типа
                  new XmlSerializer(typeof(List<GroupData>)) // читает данные типа List<GroupData>
                  .Deserialize(new StreamReader(@"groups.xml")); // из указанного файла
 
-
-        }
-
-        [Test, TestCaseSource("GroupDataFromXmlFile")]
-        public void GroupCreationTestWithXml(GroupData group)
-        {
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
-
-            app.Groups.Create(group);
-
-            Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
-
-            List<GroupData> newGroups = app.Groups.GetGroupList();
-            oldGroups.Add(group);
-            oldGroups.Sort();
-            newGroups.Sort();
-            Assert.AreEqual(oldGroups, newGroups);
         }
 
         public static IEnumerable<GroupData> GroupDataFromJsonFile() // метод чтения данных
         {
-
            return JsonConvert.DeserializeObject<List<GroupData>>(File.ReadAllText(@"groups.json"));
-
-
-        }
-
-        [Test, TestCaseSource("GroupDataFromJsonFile")]// включили провайдер для чтения данных из файла
-        public void GroupCreationTestWithJson(GroupData group)
-        {
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
-
-            app.Groups.Create(group);
-
-            Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
-
-            List<GroupData> newGroups = app.Groups.GetGroupList();
-            oldGroups.Add(group);
-            oldGroups.Sort();
-            newGroups.Sort();
-            Assert.AreEqual(oldGroups, newGroups);
         }
 
         public static IEnumerable<GroupData> GroupDataFromExcelFile() // метод чтения данных
@@ -178,28 +110,37 @@ namespace addressbook_web_tests.Tests
             app.Visible = false;
             app.Quit();
             return groups;
-
-
-
         }
 
-        [Test, TestCaseSource("GroupDataFromExcelFile")]
-        public void GroupCreationTestExcel(GroupData group)
+        [Test, TestCaseSource("GroupDataFromJsonFile")]// включили провайдер для чтения данных из файла
+        public void GroupCreationTestWithJson(GroupData group)
         {
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
+            List<GroupData> oldGroups = GroupData.GetAll();
 
             app.Groups.Create(group);
 
             Assert.AreEqual(oldGroups.Count + 1, app.Groups.GetGroupCount());
 
-            List<GroupData> newGroups = app.Groups.GetGroupList();
+            List<GroupData> newGroups = GroupData.GetAll();
             oldGroups.Add(group);
             oldGroups.Sort();
             newGroups.Sort();
             Assert.AreEqual(oldGroups, newGroups);
         }
 
+        [Test]
+        public void TestDBConnectivity()
+        {   
+            DateTime now = DateTime.Now;
+            List<GroupData> fromUI = app.Groups.GetGroupList();
+            DateTime after = DateTime.Now;
+            Console.WriteLine("UI: " + after.Subtract(now));
 
+            now = DateTime.Now;
+            List<GroupData> fromDB = GroupData.GetAll();                       
+            after = DateTime.Now;
+            Console.WriteLine("DB: " + after.Subtract(now));
+        }
 
 
     }

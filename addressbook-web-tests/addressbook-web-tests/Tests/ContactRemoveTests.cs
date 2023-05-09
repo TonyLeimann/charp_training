@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace addressbook_web_tests.Tests
 {
     [TestFixture]
-    public class ContactRemoveTests: AuthTestBase
+    public class ContactRemoveTests: ContactTestBase
     {
 
         [Test]
@@ -18,15 +18,16 @@ namespace addressbook_web_tests.Tests
         {
             app.Contact.FindContactAnotherCreate();
 
-            List<ContactData> oldContacts = app.Contact.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
+            ContactData toBeRevoved = oldContacts[0];
 
-            app.Contact.Remove(0);
+
+            app.Contact.Remove(toBeRevoved);
 
             Assert.AreEqual(oldContacts.Count - 1, app.Contact.GetContactCount());
 
-            List<ContactData> newContacts = app.Contact.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
 
-            ContactData toBeRevoved = oldContacts[0];
 
             oldContacts.RemoveAt(0);
 

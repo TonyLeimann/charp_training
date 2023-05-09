@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using LinqToDB.Mapping;
 
 namespace addressbook_web_tests
 {
+    [Table(Name = "addressbook")]
     public class ContactData:IEquatable<ContactData>,IComparable<ContactData>   
     {
-       
+        
 
         private string allEmails;
         private string allPhones;
@@ -28,20 +30,31 @@ namespace addressbook_web_tests
         {
            
         }
-
+        [Column(Name = "firstname"), NotNull]
         public string Firstname { get; set; }
+        [Column(Name = "middlename"), NotNull]
         public string Middlename { get; set; }
+        [Column(Name = "lastname"), NotNull]
         public string Lastname { get; set; }
+        [Column(Name = "company"), NotNull]
         public string Company { get; set; }
+        [Column(Name = "nickname"), NotNull]
         public string Nick { get; set; }
-        [JsonIgnore]
+        [Column(Name = "id"), PrimaryKey, Identity]
         public string ID { get; set; }
+        [Column(Name = "mobile"), NotNull]
         public string Mphone { get; set; }
+        [Column(Name = "home")]
         public string Hphone { get;  set; }
+        [Column(Name = "work"), NotNull]
         public string Wphone { get;  set; }
+        [Column(Name = "email"), NotNull]
         public string Email { get; set; }
+        [Column(Name = "email2"), NotNull]
         public string Email2 { get; set; }
+        [Column(Name = "email3"), NotNull]
         public string Email3 { get; set; }
+        [Column(Name = "address"), NotNull]
         public string Address { get;  set; }
         [XmlIgnore]//The XmlSerializer ignores this field.
         //[JsonIgnore] 
@@ -188,7 +201,17 @@ namespace addressbook_web_tests
 
         public override string ToString()
         {
-            return "firstname = " + Firstname + "\nmiddlename = " + Middlename + "\nlastname = " + Lastname;
+            return "firstname = " + Firstname + "\n middlename = " + Middlename + "\n lastname = " + Lastname;
         }
+
+        public static List<ContactData> GetAll()
+        {
+            using (AddressBookDB db = new AddressBookDB()) // установка соединения
+            {
+                return (from contact in db.Contacts select contact).ToList();
+            }
+        }
+
+
     }
 }
