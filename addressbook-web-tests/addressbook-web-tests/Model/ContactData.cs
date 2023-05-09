@@ -54,6 +54,8 @@ namespace addressbook_web_tests
         public string Email2 { get; set; }
         [Column(Name = "email3"), NotNull]
         public string Email3 { get; set; }
+        [Column(Name = "deprecated")]
+        public string Deprecaed { get; set; }   
         [Column(Name = "address"), NotNull]
         public string Address { get;  set; }
         [XmlIgnore]//The XmlSerializer ignores this field.
@@ -208,7 +210,7 @@ namespace addressbook_web_tests
         {
             using (AddressBookDB db = new AddressBookDB()) // установка соединения
             {
-                return (from contact in db.Contacts select contact).ToList();
+                return (from contact in db.Contacts.Where(x => x.Deprecaed == "0000-00-00 00:00:00") select contact).ToList();
             }
         }
 

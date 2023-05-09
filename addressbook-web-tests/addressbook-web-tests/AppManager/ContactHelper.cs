@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
@@ -13,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static LinqToDB.Reflection.Methods.LinqToDB;
 
 namespace addressbook_web_tests
 {
@@ -91,6 +93,86 @@ namespace addressbook_web_tests
             return this;
         }
 
+        public void AddContactToGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.GoToHomePage();
+            ClearGroupFilter();
+            SelectContact(contact.ID);
+            SelectGroupToAdd(group.ID);
+            CommitAddingContactToGroup();
+
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+
+        }
+
+        public void RemoveContactFromGroup(GroupData group, ContactData contact)
+        {
+            manager.Navigator.GoToHomePage();
+            SelectGroupForRemoveContact(group.ID);
+            SelectContact(contact.ID);
+            SubmitRemoveContactFromGroup();
+
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+
+        }
+
+        public ContactHelper FindContactAtGroupAnotherCreate()
+        {
+            GroupData group = GroupData.GetAll()[0];
+            List<ContactData> oldList = group.GetContacts();
+            ContactData contact = ContactData.GetAll()[0];// добавляем всегда первый контакт в группу, так как в группе нет никаких контактов
+
+            if(oldList.Count == 0)
+            {
+                manager.Navigator.GoToHomePage();
+                ClearGroupFilter();
+                SelectContact(contact.ID);
+                SelectGroupToAdd(group.ID);
+                CommitAddingContactToGroup();
+
+                new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                    .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+                
+                ReturnToGroupAddressInGroups(group.ID);
+
+
+                oldList.Add(contact);
+            }
+
+            return this;
+
+        }
+
+        public void ReturnToGroupAddressInGroups(string groupID)
+        {
+            driver.FindElement(By.CssSelector("div.msgbox")).FindElement(By.CssSelector("a[href*='./?group="+ groupID +"']")).Click();
+        }
+        private void SubmitRemoveContactFromGroup()
+        {
+            driver.FindElement(By.Name("remove")).Click();
+        }
+
+        private void SelectGroupForRemoveContact(string groupID)
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByValue(groupID);
+        }
+
+        public void CommitAddingContactToGroup()
+        {
+            driver.FindElement(By.Name("add")).Click();
+        }
+
+        public void SelectGroupToAdd(string groupID)
+        {
+            new SelectElement(driver.FindElement(By.Name("to_group"))).SelectByValue(groupID);
+        }
+
+        public void ClearGroupFilter()
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[all]");
+        }
 
         public ContactHelper ConfirmDeleteContact()
         {
@@ -146,6 +228,8 @@ namespace addressbook_web_tests
             }
             return this;                      
         }
+
+
 
         private List<ContactData> contactCache = null;
         
@@ -251,5 +335,7 @@ namespace addressbook_web_tests
             string number =  driver.FindElement(By.CssSelector("span#search_count")).Text;
             return Int32.Parse(number);
         }
+
+
     }
 }

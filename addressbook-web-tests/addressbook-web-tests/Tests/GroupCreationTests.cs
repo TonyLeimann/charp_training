@@ -142,6 +142,19 @@ namespace addressbook_web_tests.Tests
             Console.WriteLine("DB: " + after.Subtract(now));
         }
 
+        [Test]
+        public void TestDBConnectivity2()
+        {
+            //foreach (ContactData contact in GroupData.GetAll()[0].GetContacts())
+            //{
+            //    Console.WriteLine(contact);
+            //}
+
+            foreach(ContactData contact in ContactData.GetAll())
+            {
+                Console.WriteLine(contact.Deprecaed);
+            }
+        }
 
     }
 }
