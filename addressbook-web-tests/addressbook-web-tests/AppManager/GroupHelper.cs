@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using addressbook_web_tests.Tests;
+using NUnit.Framework.Internal;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -176,6 +178,39 @@ namespace addressbook_web_tests
             return driver.FindElements(By.CssSelector("span.group")).Count;
         }
 
+        public GroupHelper FindSomeGroup()
+        {
+           List<GroupData> someGroups = GroupData.GetAll();
 
+            if(someGroups.Count == 0)
+            {
+                GroupData group = new GroupData(TestBase.GenerateRandomsString(10));
+
+                Create(group);  
+            }
+
+            return this;
+
+        }
+
+        public GroupData FindGroupWithContact()
+        {
+            for (int i = 0; i < GroupData.GetAll().Count(); i++)
+            {
+                GroupData group = GroupData.GetAll()[i];
+                List<ContactData> catalogContacts = group.GetContacts();
+
+                if(catalogContacts.Count == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    return group;
+                } 
+            }
+
+            return null;
+        }
     }
 }

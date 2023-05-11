@@ -12,16 +12,27 @@ namespace addressbook_web_tests.Tests
         [Test]
 
         public void TestRemovingConatactFromGroup()
+
+
         {
-            app.Contact.FindContactAtGroupAnotherCreate();
+            app.Groups.FindSomeGroup();
+            app.Contact.FindSomeContact();
 
-            GroupData group = GroupData.GetAll()[0];
-            List<ContactData> oldList = group.GetContacts();
-            ContactData toBeRevoved = oldList[0];// удаляем первый контакт в группе
+            GroupData foundGroup =  app.Groups.FindGroupWithContact();
+            ContactData toBeRevoved = new ContactData();
 
-            app.Contact.RemoveContactFromGroup(group, toBeRevoved);
+            if (foundGroup == null)
+            {
+                toBeRevoved = ContactData.GetAll()[0];
+                foundGroup = GroupData.GetAll()[0];
+                app.Contact.AddContactToGroup(toBeRevoved, foundGroup);
+            }
 
-            List<ContactData> newList = group.GetContacts();
+            List<ContactData> oldList = foundGroup.GetContacts();
+            toBeRevoved = oldList[0];
+
+            app.Contact.RemoveContactFromGroup(foundGroup, toBeRevoved);
+            List<ContactData> newList = foundGroup.GetContacts();
 
             oldList.RemoveAt(0);
             newList.Sort();
@@ -29,13 +40,6 @@ namespace addressbook_web_tests.Tests
             Assert.AreEqual(oldList, newList);
 
         }
-
-
-
-
-
-
-
 
     }
 }

@@ -1,4 +1,6 @@
-﻿using NUnit.Framework.Internal;
+﻿using addressbook_web_tests.Tests;
+using Google.Protobuf.WellKnownTypes;
+using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
@@ -7,9 +9,11 @@ using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization.Formatters;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -115,33 +119,6 @@ namespace addressbook_web_tests
 
             new WebDriverWait(driver, TimeSpan.FromSeconds(10))
                 .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
-
-        }
-
-        public ContactHelper FindContactAtGroupAnotherCreate()
-        {
-            GroupData group = GroupData.GetAll()[0];
-            List<ContactData> oldList = group.GetContacts();
-            ContactData contact = ContactData.GetAll()[0];// добавляем всегда первый контакт в группу, так как в группе нет никаких контактов
-
-            if(oldList.Count == 0)
-            {
-                manager.Navigator.GoToHomePage();
-                ClearGroupFilter();
-                SelectContact(contact.ID);
-                SelectGroupToAdd(group.ID);
-                CommitAddingContactToGroup();
-
-                new WebDriverWait(driver, TimeSpan.FromSeconds(10))
-                    .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
-                
-                ReturnToGroupAddressInGroups(group.ID);
-
-
-                oldList.Add(contact);
-            }
-
-            return this;
 
         }
 
@@ -336,6 +313,56 @@ namespace addressbook_web_tests
             return Int32.Parse(number);
         }
 
+        internal void FindNotAtGroupContact()
+        {
+            throw new NotImplementedException();
+        }
 
+        public GroupData FindingSpecificPair()
+        {
+
+            for (int i = 0; i < GroupData.GetAll().Count(); i++)
+            {
+                GroupData group = GroupData.GetAll()[i];
+                List<ContactData> oldList = group.GetContacts();
+                ContactData contact = ContactData.GetAll().Except(oldList).FirstOrDefault();
+
+
+                if (contact == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    
+                    return group;
+                }
+            }
+            
+            return null;
+
+        }
+
+        public GroupData CheckAvailabilityGroup(GroupData someGroup)
+        {            
+            ContactData contact = new ContactData(TestBase.GenerateRandomsString(10), TestBase.GenerateRandomsString(10));
+            Create(contact);
+            
+            return FindingSpecificPair();
+        }
+
+        public ContactHelper FindSomeContact()
+        {
+            List<ContactData> someContact = ContactData.GetAll();
+
+            if (someContact.Count == 0)
+            {
+                ContactData contact = new ContactData(TestBase.GenerateRandomsString(10), TestBase.GenerateRandomsString(10));
+
+                Create(contact);
+            }
+
+            return this;
+        }
     }
 }
